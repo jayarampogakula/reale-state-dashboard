@@ -56,3 +56,13 @@ VALUES (
     '$2y$10$H9cvW4hT4zH4Kn8Y9V7UQOT1XoX1mVWxuP/BuWc8SX1s7htJQmJFG',
     'superadmin'
 );
+CREATE TABLE projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    location VARCHAR(200),
+    price_range VARCHAR(100),
+    amenities TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
+);
