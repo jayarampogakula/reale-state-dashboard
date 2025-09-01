@@ -9,16 +9,34 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === "GET") {
     if ($user['role'] === "agent") {
-        $stmt = $pdo->prepare("SELECT * FROM leads WHERE assigned_to=?");
+        $stmt = $pdo->prepare("
+            SELECT leads.*, projects.name as project_name, users.username as agent_name
+            FROM leads
+            LEFT JOIN projects ON leads.project_id = projects.id
+            LEFT JOIN users ON leads.assigned_to = users.id
+            WHERE leads.assigned_to=?
+        ");
         $stmt->execute([$user['id']]);
     } elseif ($user['role'] === "companyadmin") {
-        $stmt = $pdo->prepare("SELECT * FROM leads WHERE company_id=?");
+        $stmt = $pdo->prepare("
+            SELECT leads.*, projects.name as project_name, users.username as agent_name
+            FROM leads
+            LEFT JOIN projects ON leads.project_id = projects.id
+            LEFT JOIN users ON leads.assigned_to = users.id
+            WHERE leads.company_id=?
+        ");
         $stmt->execute([$user['company_id']]);
     } else {
-        $stmt = $pdo->query("SELECT * FROM leads");
+        $stmt = $pdo->query("
+            SELECT leads.*, projects.name as project_name, users.username as agent_name
+            FROM leads
+            LEFT JOIN projects ON leads.project_id = projects.id
+            LEFT JOIN users ON leads.assigned_to = users.id
+        ");
     }
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 }
+
 if ($method === "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
 
