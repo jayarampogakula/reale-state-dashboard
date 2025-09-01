@@ -1,0 +1,17 @@
+# Enable Rewrite Engine
+RewriteEngine On
+
+# -----------------------------------------------------
+# 1. Route /api requests directly to PHP scripts
+#    Example: /api/auth.php → runs PHP, not React
+# -----------------------------------------------------
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^ - [L]
+
+# -----------------------------------------------------
+# 2. React Router SPA support
+#    Any non-file, non-dir → send to index.html
+# -----------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
