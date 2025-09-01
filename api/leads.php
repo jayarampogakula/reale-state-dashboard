@@ -19,3 +19,16 @@ if ($method === "GET") {
     }
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 }
+if ($method === "POST") {
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    $stmt = $pdo->prepare("INSERT INTO leads (name, phone, budget, timeline, status, outcome, company_id, assigned_to, project_id, site_visit_date, payment_due_date)
+                           VALUES (?, ?, ?, ?, 'New', '', ?, ?, ?, ?, ?)");
+    $stmt->execute([
+        $data['name'], $data['phone'], $data['budget'], $data['timeline'],
+        $user['company_id'], $data['assigned_to'] ?? null, $data['project_id'] ?? null,
+        $data['site_visit_date'] ?? null, $data['payment_due_date'] ?? null
+    ]);
+
+    echo json_encode(["message" => "Lead created"]);
+}
