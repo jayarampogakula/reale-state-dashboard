@@ -66,3 +66,9 @@ CREATE TABLE projects (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 );
+
+ALTER TABLE leads ADD COLUMN project_id INT NULL;
+
+ALTER TABLE leads
+  ADD CONSTRAINT fk_lead_project
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL;
