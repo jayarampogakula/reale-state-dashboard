@@ -62,3 +62,18 @@ $twilio->messages->create("whatsapp:$phone", [
     "from" => $_ENV['TWILIO_WHATSAPP'],
     "body" => $reply
 ]);
+
+
+$projectStmt = $pdo->prepare("SELECT * FROM projects WHERE id=? LIMIT 1");
+$projectStmt->execute([$lead['project_id']]);
+$project = $projectStmt->fetch(PDO::FETCH_ASSOC);
+
+if ($project) {
+    $prompt = "Project: {$project['name']}\n"
+            . "Location: {$project['location']}\n"
+            . "Price: {$project['price_range']}\n"
+            . "Amenities: {$project['amenities']}\n\n"
+            . "Buyer asked: \"$body\"";
+} else {
+    $prompt = "Buyer asked: \"$body\" (No project linked)";
+}
