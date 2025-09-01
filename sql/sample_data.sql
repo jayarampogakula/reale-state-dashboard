@@ -26,6 +26,12 @@ INSERT INTO users (username, password_hash, role, company_id) VALUES
 
 -- Password = "agent123" for all agents
 
+INSERT INTO projects (company_id, name, location, price_range, amenities)
+VALUES
+(1, 'Dream Residency', 'Whitefield, Bangalore', '₹80L–₹1.2Cr', 'Swimming pool, Gym, Garden'),
+(2, 'Skyline Heights', 'Gurgaon, Sector 45', '₹60L–₹90L', 'Clubhouse, Kids Play Area, Parking');
+
+
 -- Insert Leads for Dream Homes
 INSERT INTO leads (name, phone, budget, timeline, status, outcome, company_id, assigned_to, site_visit_date, payment_due_date)
 VALUES
