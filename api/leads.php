@@ -32,3 +32,20 @@ if ($method === "POST") {
 
     echo json_encode(["message" => "Lead created"]);
 }
+if ($method === "GET") {
+    if ($user['role'] === "agent") {
+        $stmt = $pdo->prepare("SELECT leads.*, projects.name as project_name 
+                               FROM leads LEFT JOIN projects ON leads.project_id=projects.id
+                               WHERE leads.assigned_to=?");
+        $stmt->execute([$user['id']]);
+    } elseif ($user['role'] === "companyadmin") {
+        $stmt = $pdo->prepare("SELECT leads.*, projects.name as project_name 
+                               FROM leads LEFT JOIN projects ON leads.project_id=projects.id
+                               WHERE leads.company_id=?");
+        $stmt->execute([$user['company_id']]);
+    } else {
+        $stmt = $pdo->query("SELECT leads.*, projects.name as project_name 
+                             FROM leads LEFT JOIN projects ON leads.project_id=projects.id");
+    }
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+}
